@@ -111,7 +111,7 @@ const Header = () => (
       <Grid item xs={6}>
         <Paper sx={{ p: 2.5, backgroundColor: 'rgba(255, 255, 255, 0.15)', color: '#FFFFFF', borderRadius: '20px', height: '160px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
           <Typography variant="body1" sx={{ fontWeight: 500, lineHeight: 1.4 }}>
-            Задонать на развитие коворкинга и поднимись в рейтинге
+            Задонать на развитие коворкинга 
           </Typography>
           <Box sx={{ backgroundColor: 'rgba(255, 255, 255, 0.25)', borderRadius: '8px', p: 1, display: 'inline-flex', alignSelf: 'flex-start' }}>
             <CameraAlt />
