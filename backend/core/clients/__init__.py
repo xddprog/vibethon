@@ -1,1 +1,0 @@
-from backend.core.clients.redis_client import RedisClient
