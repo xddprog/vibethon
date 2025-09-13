@@ -1,0 +1,346 @@
+basePath: /api/v1
+definitions:
+  api.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  api.PaginationInfo:
+    properties:
+      page:
+        type: integer
+      page_size:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  api.UserListResponse:
+    properties:
+      pagination:
+        $ref: '#/definitions/api.PaginationInfo'
+      users:
+        items:
+          $ref: '#/definitions/models.UserResponse'
+        type: array
+    type: object
+  models.Achievement:
+    properties:
+      color:
+        description: HEX цвет
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  models.Coworking:
+    properties:
+      capacity:
+        type: integer
+      current_people:
+        type: integer
+      id:
+        type: integer
+      monitors_free:
+        type: integer
+      monitors_total:
+        type: integer
+      name:
+        type: string
+      playstation_available:
+        type: boolean
+      responsible_user:
+        $ref: '#/definitions/models.User'
+      responsible_user_id:
+        type: integer
+      status:
+        $ref: '#/definitions/models.CoworkingStatus'
+      support_contact:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.CoworkingStatus:
+    enum:
+    - open
+    - closed
+    type: string
+    x-enum-varnames:
+    - StatusOpen
+    - StatusClosed
+  models.CreateUserRequest:
+    properties:
+      id:
+        description: Telegram ID (primary key)
+        type: integer
+      username:
+        description: уникальный логин
+        type: string
+    type: object
+  models.UpdateCoworkingRequest:
+    properties:
+      capacity:
+        type: integer
+      current_people:
+        type: integer
+      monitors_free:
+        type: integer
+      monitors_total:
+        type: integer
+      name:
+        type: string
+      playstation_available:
+        type: boolean
+      responsible_user_id:
+        type: integer
+      status:
+        $ref: '#/definitions/models.CoworkingStatus'
+      support_contact:
+        type: string
+    type: object
+  models.User:
+    properties:
+      achievements:
+        items:
+          $ref: '#/definitions/models.Achievement'
+        type: array
+      created_at:
+        type: string
+      donations:
+        type: integer
+      id:
+        description: telegrammid
+        type: integer
+      is_active:
+        type: boolean
+      lvl:
+        type: integer
+      role:
+        $ref: '#/definitions/models.UserRole'
+      updated_at:
+        type: string
+      username:
+        type: string
+      visits:
+        description: количество визитов
+        type: integer
+      xp:
+        type: integer
+    type: object
+  models.UserResponse:
+    properties:
+      achievements:
+        items:
+          $ref: '#/definitions/models.Achievement'
+        type: array
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      lvl:
+        type: integer
+      role:
+        $ref: '#/definitions/models.UserRole'
+      username:
+        type: string
+      visits:
+        type: integer
+      xp:
+        type: integer
+    type: object
+  models.UserRole:
+    enum:
+    - user
+    - admin
+    - moderator
+    type: string
+    x-enum-varnames:
+    - RoleUser
+    - RoleAdmin
+    - RoleMod
+host: localhost:8000
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: API для приложения Vibeton - коворкинг платформа
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Vibeton API
+  version: "1.0"
+paths:
+  /coworking/{id}:
+    get:
+      description: Получает коворкинг по ID
+      parameters:
+      - description: ID коворкинга
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Coworking'
+        "400":
+          description: Неверный ID коворкинга
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "404":
+          description: Коворкинг не найден
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Получить коворкинг
+      tags:
+      - coworking
+    put:
+      consumes:
+      - application/json
+      description: Обновляет данные коворкинга
+      parameters:
+      - description: ID коворкинга
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Обновленные данные
+        in: body
+        name: coworking
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateCoworkingRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Coworking'
+        "400":
+          description: Неверный формат запроса или ID
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "404":
+          description: Коворкинг не найден
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Обновить коворкинг
+      tags:
+      - coworking
+  /users:
+    get:
+      description: Получает список пользователей с пагинацией
+      parameters:
+      - default: 1
+        description: Номер страницы
+        in: query
+        name: page
+        type: integer
+      - default: 10
+        description: Размер страницы
+        in: query
+        name: page_size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/api.UserListResponse'
+        "400":
+          description: Неверные параметры пагинации
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Список пользователей
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Создает нового пользователя в системе
+      parameters:
+      - description: Данные пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Неверный формат запроса
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "409":
+          description: Пользователь уже существует
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Создать пользователя
+      tags:
+      - users
+  /users/{id}:
+    get:
+      description: Получает пользователя по ID
+      parameters:
+      - description: ID пользователя
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.UserResponse'
+        "400":
+          description: Неверный ID пользователя
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "404":
+          description: Пользователь не найден
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            $ref: '#/definitions/api.ErrorResponse'
+      summary: Получить пользователя
+      tags:
+      - users
+schemes:
+- http
+swagger: "2.0"
