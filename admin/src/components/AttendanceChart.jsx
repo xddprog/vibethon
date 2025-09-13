@@ -337,16 +337,6 @@ const AttendanceChart = ({ onToggleSidebar }) => {
                           dot={chartType === 'line' ? { fill: '#ffffff', strokeWidth: 0, r: 3 } : false}
                           fillOpacity={0.7}
                         />
-                        <ChartElement 
-                          dataKey="online" 
-                          fill="#666666"
-                          stroke="#666666"
-                          strokeWidth={chartType === 'line' ? 2 : 0}
-                          name="Онлайн" 
-                          radius={chartType === 'bar' ? [2, 2, 0, 0] : 0}
-                          dot={chartType === 'line' ? { fill: '#666666', strokeWidth: 0, r: 3 } : false}
-                          fillOpacity={0.7}
-                        />
                       </ChartComponent>
                     );
                   })()}

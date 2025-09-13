@@ -31,11 +31,6 @@ const Sidebar = ({ currentView, setCurrentView, mobileOpen, handleDrawerToggle }
     { text: 'Модерация', icon: <MessageIcon />, view: 'messages' },
   ];
 
-  const handleLogout = () => {
-    localStorage.removeItem('adminToken');
-    window.location.reload();
-  };
-
   const drawerContent = (
     <>
       <Toolbar sx={{ 
@@ -51,10 +46,10 @@ const Sidebar = ({ currentView, setCurrentView, mobileOpen, handleDrawerToggle }
             fontWeight: 700,
             color: '#ffffff',
           }}>
-            G513 Admin
+            Коворкинг
           </Typography>
           <Typography variant="caption" sx={{ color: '#888888' }}>
-            Coworking Management
+            Админ панель
           </Typography>
         </Box>
         <IconButton
@@ -116,7 +111,6 @@ const Sidebar = ({ currentView, setCurrentView, mobileOpen, handleDrawerToggle }
       <List sx={{ px: 1, pb: 2 }}>
         <ListItem disablePadding>
           <ListItemButton
-            onClick={handleLogout}
             sx={{
               borderRadius: 2,
               color: '#888888',

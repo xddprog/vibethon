@@ -93,12 +93,6 @@ function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [mobileOpen, setMobileOpen] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
